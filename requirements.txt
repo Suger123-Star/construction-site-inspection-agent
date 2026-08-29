@@ -1,0 +1,6 @@
+# 核心依赖（最小可运行）
+gradio>=4.44
+requests>=2.32
+python-dotenv>=1.0
+# MiniMax 官方推荐：OpenAI 兼容 SDK（minimax_smoke_test.py --sdk 会用到）
+openai>=1.0

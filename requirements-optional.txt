@@ -1,0 +1,10 @@
+# 可选：真实视觉 / 语音 / 检索能力
+# 根据硬件和时间选择安装，未安装时 app.py 仍可用 DEMO_MODE 跑通。
+paddlepaddle>=2.6
+paddleocr>=2.7
+openai-whisper>=20240930
+funasr>=1.1
+sentence-transformers>=2.7
+chromadb>=0.5
+# 可选：MiniMax 的 Anthropic 兼容 SDK（冒烟测试 --anthropic 使用）
+anthropic>=0.40

@@ -1,0 +1,3 @@
+{"review_id":"sample001","action":"confirm","note":"识别正确，已通知班组整改","corrected":"","ts":"2026-08-29T16:10:00"}
+{"review_id":"sample002","action":"correct","note":"现场已有动火证，未入画","corrected":"动火作业状态改为已持证，风险等级降为低","ts":"2026-08-29T16:22:00"}
+{"review_id":"sample003","action":"correct","note":"人员实际在安全通道外短暂停留","corrected":"安全帽未佩戴仍成立，补充现场围护缺失","ts":"2026-08-29T16:35:00"}
