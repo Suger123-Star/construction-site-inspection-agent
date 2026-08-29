@@ -448,6 +448,13 @@ def inspect_and_speak(image_path: Optional[str]) -> tuple[dict[str, Any], str, s
         "生成简洁、可执行的隐患描述和整改措施，并给出风险等级；"
         "对低置信度或信息不足的项明确标注“需人工确认”。"
     )
+    corrections = load_recent_corrections()
+    if corrections:
+        corr_lines = "\n".join(
+            f"- 现场意见：{c['note'] or '无'}；修正：{c['corrected'] or '无'}"
+            for c in corrections
+        )
+        system += ("\n\n以下为历史人工纠偏案例，请在本次生成时参考以避免重复同类错误：\n" + corr_lines)
     draft = call_minimax_text(system, user_prompt)
 
     record = InspectionRecord(
@@ -504,7 +511,30 @@ def submit_human_review(review_id: str, action: str, note: str, corrected: str) 
     return summary
 
 
+def load_recent_corrections(limit: int = 6) -> list[dict[str, str]]:
+    """读取人工纠偏记录，作为下一次生成的先验案例，形成“纠偏回流”。"""
+    items: list[dict[str, str]] = []
+    if not FEEDBACK_FILE.exists():
+        return items
+    for line in FEEDBACK_FILE.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+        except Exception:
+            continue
+        if entry.get("action") != "correct":
+            continue
+        note = str(entry.get("note", "")).strip()
+        corrected = str(entry.get("corrected", "")).strip()
+        if note or corrected:
+            items.append({"note": note, "corrected": corrected})
+    return items[-limit:]
+
+
 # ---------------------------------------------------------------- 界面
+
 def build_ui():
     if gr is None:
         raise SystemExit("未安装 gradio，请先执行：pip install -r requirements.txt")
